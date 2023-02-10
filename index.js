@@ -11,6 +11,7 @@ morgan.token("req_content", function(req, res){
 })
 
 app.use(cors())
+app.use(express.static('build'))
 app.use(express.json())
 app.use(morgan(function (tokens, req, res) {
     return [
