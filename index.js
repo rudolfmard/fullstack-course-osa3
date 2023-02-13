@@ -26,8 +26,6 @@ app.use(morgan(function (tokens, req, res) {
     ].join(' ')
   }))
 
-let persons = []
-
 app.get("/api/persons", (req, res, next) => {
     Person.find({})
         .then(persons => {
@@ -36,15 +34,17 @@ app.get("/api/persons", (req, res, next) => {
         .catch(error => next(error))
 })
 
-app.get("/api/persons/:id", (req, res) => {
-    const id = Number(req.params.id)
-    const person = persons.find(person => person.id === id)
-    if (person){
-        res.json(person)
-    }
-    else{
-        res.status(404).end()
-    }
+app.get("/api/persons/:id", (req, res, next) => {
+    Person.find({_id: req.params.id})
+        .then(result => {
+            if (result.length === 0){
+                res.status(404).end()
+            }
+            else{
+                res.json(result[0])
+            }
+        })
+        .catch(error => next(error))
 })
 
 app.delete("/api/persons/:id", (req, res, next) => {
@@ -92,8 +92,12 @@ app.put("/api/persons/:id", (req, res, next) => {
         .catch(error => next(error))
 })
 
-app.get("/info", (req, res) => {
-    res.send(`<p>Phonebook has info for ${persons.length} people</p><p>${Date(Date.now()).toString()}</p>`)
+app.get("/info", (req, res, next) => {
+    Person.find({})
+    .then(persons => {
+        res.send(`<p>Phonebook has info for ${persons.length} people</p><p>${Date(Date.now()).toString()}</p>`)
+    })
+    .catch(error => next(error))
 })
 
 const PORT = process.env.PORT
