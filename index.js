@@ -26,7 +26,7 @@ app.use(morgan(function (tokens, req, res) {
     ].join(' ')
   }))
 
-persons = []
+let persons = []
 
 app.get("/api/persons", (req, res) => {
     Person.find({}).then(persons => {
@@ -53,27 +53,28 @@ app.delete("/api/persons/:id", (req, res) => {
 })
 
 app.post("/api/persons", (req, res) => {
-    const person = {...req.body}
+    const body = {...req.body}
 
-    if (!person.name || person.name === ""){
-        return res.status(400).json({
-            error: "name is missing"
-        })
+    if (!body.name || body.name === ""){
+        return res.status(400).json({error: "name is missing"})
     }
-    else if (!person.number || person.number === ""){
-        return res.status(400).json({
-            error: "number is missing"
-        })
+    else if (!body.number || body.number === ""){
+        return res.status(400).json({error: "number is missing"})
     }
-    else if (persons.find(p => p.name === person.name)){
-        return res.status(400).json({
-            error: "name must be unique"
-        })
-    }
+//    else if (body.find(p => p.name === body.name)){
+//        return res.status(400).json({error: "name must be unique"})
+//    }
 
-    person.id = Math.floor(Math.random()*1000)
-    persons = persons.concat(person)
-    res.json(person)
+    new_id = Math.floor(Math.random()*1000)
+    const person = new Person({
+        name: body.name,
+        number: body.number,
+        id: new_id 
+    })
+
+    person.save().then(savedPerson => {
+        res.json(savedPerson)
+    })
 })
 
 app.get("/info", (req, res) => {
