@@ -1,1 +1,2 @@
-DELETE https://fullstack-osa3-puhelinluettelo.onrender.com/api/persons/1
+#DELETE https://fullstack-osa3-puhelinluettelo.onrender.com/api/persons/1
+DELETE http://localhost:3001/api/persons/666
