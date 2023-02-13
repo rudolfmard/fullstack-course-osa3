@@ -64,9 +64,6 @@ app.post("/api/persons", (req, res, next) => {
     else if (!body.number || body.number === ""){
         return res.status(400).json({error: "number is missing"})
     }
-//    else if (body.find(p => p.name === body.name)){
-//        return res.status(400).json({error: "name must be unique"})
-//    }
 
     const person = new Person({
         name: body.name,
@@ -76,6 +73,21 @@ app.post("/api/persons", (req, res, next) => {
     person.save()
         .then(savedPerson => {
             res.json(savedPerson)
+        })
+        .catch(error => next(error))
+})
+
+app.put("/api/persons/:id", (req, res, next) => {
+    const body = {...req.body}
+
+    const person = {
+        name: body.name,
+        number: body.number
+    }
+
+    Person.findByIdAndUpdate(req.params.id, person, {new: true})
+        .then(updatedPerson => {
+            res.json(updatedPerson)
         })
         .catch(error => next(error))
 })
