@@ -1,7 +1,8 @@
-POST https://fullstack-osa3-puhelinluettelo.onrender.com/api/persons
+#POST https://fullstack-osa3-puhelinluettelo.onrender.com/api/persons
+POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name": "Poppy Dickings",
-    "number": "040-666555"
+    "name": "Testi Jannu",
+    "number": "11-111111"
 }
